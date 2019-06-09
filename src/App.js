@@ -5,73 +5,82 @@ import axios from 'axios';
 import { link } from 'fs';
 
 export default class App extends React.Component{
-  state = {
-    results: null,
-    link: `https://api.github.com/search/users?q=fisharman`
-  };
+
+  constructor(){
+    super();
+    this.state = {
+      results: null,
+      link: `https://api.github.com/search/users?`,
+      username: "",
+    };
+      // this.handleChange = this.handleChange.bind(this); /* no need to do with arrow function */
+      // this.handleSubmit = this.handleSubmit.bind(this);  
+  }
+
 
   componentDidMount() {
-    let url = this.state.link;
-    console.log(url)
-    axios.get(url)
-      .then(res => {
-        const results = res.data;
-        this.setState({ results });
-        // console.log(JSON.stringify(results));
-      })
+ 
   }
   
   render() {
-    const JSONres = this.state.results;
-    const resultsArray = [];
-    if (JSONres) {
-      const items = JSONres.items
-      Object.keys(items).forEach( index => {
-        resultsArray.push([items[index].login, items[index].repos_url]);
-      })
-      // console.log(resultsArray);
-    }
+    // const JSONres = this.state.results;
+    // const resultsArray = [];
+    // if (JSONres) {
+    //   const items = JSONres.items
+    //   Object.keys(items).forEach( index => {
+    //     resultsArray.push([items[index].login, items[index].repos_url]);
+    //   })
+    // }
 
     return (
-      <table>
-        <tbody>
-        {resultsArray.map((row, idx) => (
-          <tr key={idx} ><td> <a href={row[1]} onClick={() => this.changeState(row[1])}>{row[0]} </a></td></tr>
-        ))}
-        </tbody>        
-      </table>
+      <div>
+          <form>
+              <label>Find  User </label><br/>
+              <input type="text" placeholder="github username" value={this.state.inputvalue} onChange={this.handleChange}/>
+              <input type="submit" value="Submit" onClick={this.findUser}/>
+            </form>
+        <div className="content">
+
+          <table >
+            <thead><tr><th>Users</th></tr></thead>
+                  <tbody>
+                  {/* {resultsArray.map((row, idx) => (
+            <tr key={idx} ><td> <a href={row[1]} onClick={() => this.changeState(row[1])}>{row[0]} </a></td></tr>
+          ))} */}
+                    </tbody>
+                    <tfoot></tfoot>   
+                    </table>
+        </div>
+
+      </div>
     );
   }
 
-  changeState(urlTo){
-    const link = urlTo
-    console.log(link);
-    this.setState({link});
-    // this.componentDidMount();
+  handleChange = (event) => {
+    this.setState({username: event.target.value});
   }
 
+  handleSubmit = (event) => {
+    console.log('Form value: ' + this.state.inputvalue);
+    event.preventDefault();
   }
 
+  findUser = async(event) => {
+    let url = this.state.link;
+    console.log(url)
+    event.preventDefault();
+    let user = this.state.username;
+    console.log(user);
+    this.setState({})
+    // return axios.get(link)
+    //   .then(res => {
+    //     const results = res.data;
+    //     this.setState({ results });
+    //     // console.log(JSON.stringify(results));
+    //   })
+    
+  }
+  }
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           WELCOME <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 
